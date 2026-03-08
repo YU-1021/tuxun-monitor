@@ -89,10 +89,258 @@ function getHTML() {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
             min-height: 100vh;
             color: #e0e0e0;
+            display: flex;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin-right: 360px;
+        }
+
+        .sidebar {
+            position: fixed;
+            right: 0;
+            top: 0;
+            width: 360px;
+            height: 100vh;
+            background: rgba(20, 20, 35, 0.98);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            background: rgba(255, 148, 39, 0.15);
+            border-bottom: 1px solid rgba(255, 148, 39, 0.3);
+        }
+
+        .sidebar-header h3 {
+            font-size: 18px;
+            color: #ff9427;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+        }
+
+        .sidebar-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar-content::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .sidebar-content::-webkit-scrollbar-thumb {
+            background: rgba(255, 148, 39, 0.5);
+            border-radius: 3px;
+        }
+
+        .change-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            border-left: 4px solid #ff9427;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .change-item.negative {
+            border-left-color: #e74c3c;
+        }
+
+        .change-item.positive {
+            border-left-color: #27ae60;
+        }
+
+        .change-time {
+            font-size: 13px;
+            color: #888;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .change-player {
+            font-size: 18px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+
+        .change-detail {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 16px;
+        }
+
+        .change-diff {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .change-diff.positive { color: #2ecc71; }
+        .change-diff.negative { color: #e74c3c; }
+
+        .change-rank {
+            color: #aaa;
+            font-size: 14px;
+        }
+
+        .no-changes {
+            text-align: center;
+            color: #666;
+            padding: 40px 20px;
+            font-size: 16px;
+        }
+
+        .current-time {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #fff;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: left;
+        }
+
+        .current-time .date {
+            font-size: 13px;
+            color: #aaa;
+            font-weight: 400;
+        }
+
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toast {
+            background: rgba(255, 148, 39, 0.95);
+            color: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            max-width: 400px;
+            min-width: 300px;
+            animation: toastIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            backdrop-filter: blur(10px);
+            position: relative;
+        }
+
+        .toast-close {
+            position: absolute;
+            top: 8px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 20px;
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+            transition: color 0.2s;
+        }
+
+        .toast-close:hover {
+            color: #fff;
+        }
+
+        .toast.removing {
+            animation: toastOut 0.3s ease-in forwards;
+        }
+
+        @keyframes toastIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes toastOut {
+            from {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            to {
+                opacity: 0;
+                transform: translateY(-20px) scale(0.9);
+            }
+        }
+
+        .toast h4 {
+            font-size: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toast-content {
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .toast-item {
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .toast-item:last-child {
+            border-bottom: none;
+        }
+
+        .toast-item .player-change {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .toast-item .rank-info {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 2px;
         }
 
         .container {
-            max-width: 900px;
+            max-width: 1000px;
             margin: 0 auto;
             padding: 20px;
         }
@@ -105,12 +353,13 @@ function getHTML() {
             margin-bottom: 20px;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
         }
 
         .header h1 {
-            font-size: 28px;
+            font-size: 32px;
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             background: linear-gradient(90deg, #ff9427, #ffb347);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -119,7 +368,7 @@ function getHTML() {
 
         .header .subtitle {
             color: #888;
-            font-size: 14px;
+            font-size: 16px;
         }
 
         .controls {
@@ -128,20 +377,20 @@ function getHTML() {
             align-items: center;
             gap: 20px;
             flex-wrap: wrap;
-            margin-top: 20px;
+            margin-top: 24px;
         }
 
         .mode-switch {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 14px;
             background: rgba(0, 0, 0, 0.3);
-            padding: 8px 16px;
+            padding: 10px 20px;
             border-radius: 25px;
         }
 
         .mode-switch span {
-            font-size: 14px;
+            font-size: 16px;
             color: #aaa;
             transition: color 0.3s;
         }
@@ -152,10 +401,10 @@ function getHTML() {
         }
 
         .toggle-btn {
-            width: 50px;
-            height: 26px;
+            width: 56px;
+            height: 30px;
             background: #333;
-            border-radius: 13px;
+            border-radius: 15px;
             cursor: pointer;
             position: relative;
             transition: background 0.3s;
@@ -164,8 +413,8 @@ function getHTML() {
         .toggle-btn::after {
             content: '';
             position: absolute;
-            width: 22px;
-            height: 22px;
+            width: 26px;
+            height: 26px;
             background: #fff;
             border-radius: 50%;
             top: 2px;
@@ -174,20 +423,20 @@ function getHTML() {
         }
 
         .toggle-btn.world::after {
-            transform: translateX(24px);
+            transform: translateX(26px);
         }
 
         .btn {
-            padding: 10px 20px;
+            padding: 12px 24px;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 16px;
             font-weight: 500;
             transition: all 0.3s;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
 
         .btn-primary {
@@ -200,16 +449,6 @@ function getHTML() {
             box-shadow: 0 4px 15px rgba(255, 148, 39, 0.4);
         }
 
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #e0e0e0;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.15);
-        }
-
         .btn-danger {
             background: linear-gradient(135deg, #e74c3c, #c0392b);
             color: white;
@@ -220,32 +459,67 @@ function getHTML() {
             color: white;
         }
 
+        .interval-setting {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 8px 16px;
+            border-radius: 25px;
+        }
+
+        .interval-setting label {
+            font-size: 14px;
+            color: #aaa;
+        }
+
+        .interval-setting input {
+            width: 60px;
+            padding: 6px 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            background: rgba(0, 0, 0, 0.3);
+            color: #fff;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .interval-setting input:focus {
+            outline: none;
+            border-color: #ff9427;
+        }
+
+        .interval-setting span {
+            font-size: 14px;
+            color: #aaa;
+        }
+
         .status-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 20px;
+            padding: 14px 24px;
             background: rgba(0, 0, 0, 0.3);
             border-radius: 12px;
             margin-bottom: 20px;
-            font-size: 13px;
+            font-size: 15px;
         }
 
         .status-bar .left {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 20px;
         }
 
         .status-indicator {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
         }
 
         .status-dot {
-            width: 8px;
-            height: 8px;
+            width: 10px;
+            height: 10px;
             border-radius: 50%;
             background: #27ae60;
             animation: pulse 2s infinite;
@@ -264,9 +538,10 @@ function getHTML() {
         .active-count {
             background: rgba(39, 174, 96, 0.2);
             color: #2ecc71;
-            padding: 4px 12px;
-            border-radius: 15px;
+            padding: 6px 16px;
+            border-radius: 20px;
             font-weight: 500;
+            font-size: 15px;
         }
 
         .rank-table-container {
@@ -284,11 +559,11 @@ function getHTML() {
 
         .rank-table th {
             background: rgba(0, 0, 0, 0.4);
-            padding: 14px 12px;
+            padding: 16px 14px;
             text-align: left;
             font-weight: 600;
             color: #aaa;
-            font-size: 13px;
+            font-size: 15px;
             position: sticky;
             top: 0;
         }
@@ -300,9 +575,9 @@ function getHTML() {
         }
 
         .rank-table td {
-            padding: 12px;
+            padding: 14px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            font-size: 14px;
+            font-size: 16px;
         }
 
         .rank-table td:nth-child(1),
@@ -327,11 +602,11 @@ function getHTML() {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 28px;
-            height: 28px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             font-weight: 700;
-            font-size: 12px;
+            font-size: 14px;
         }
 
         .rank-1 { background: linear-gradient(135deg, #FFD700, #FFA500); color: #000; }
@@ -347,12 +622,12 @@ function getHTML() {
 
         .rating {
             font-weight: 700;
-            font-size: 15px;
+            font-size: 17px;
         }
 
         .change {
             font-weight: 600;
-            font-size: 13px;
+            font-size: 15px;
         }
 
         .change.positive { color: #2ecc71; }
@@ -366,77 +641,89 @@ function getHTML() {
         }
 
         .loading-spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid rgba(255, 148, 39, 0.3);
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 148, 39, 0.3);
             border-top-color: #ff9427;
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin: 0 auto 15px;
+            margin: 0 auto 20px;
         }
 
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
 
-        .notification {
+        .footer {
+            text-align: center;
+            padding: 24px;
+            color: #666;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+
+        .mobile-sidebar-btn {
+            display: none;
             position: fixed;
             top: 20px;
             right: 20px;
-            background: rgba(255, 148, 39, 0.95);
+            z-index: 1001;
+            background: rgba(255, 148, 39, 0.9);
             color: white;
-            padding: 16px 24px;
-            border-radius: 12px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            z-index: 1000;
-            max-width: 350px;
-            transform: translateX(400px);
-            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        }
-
-        .notification.show {
-            transform: translateX(0);
-        }
-
-        .notification h4 {
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
             font-size: 14px;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
         }
 
-        .notification-content {
-            font-size: 13px;
-            line-height: 1.6;
+        .mobile-sidebar-btn:active {
+            transform: scale(0.95);
         }
 
-        .notification-item {
-            padding: 4px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        .mobile-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 99;
         }
 
-        .notification-item:last-child {
-            border-bottom: none;
+        .mobile-overlay.show {
+            display: block;
         }
 
-        .notification-item .player-change {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+        @media (max-width: 1200px) {
+            .main-content {
+                margin-right: 0;
+            }
 
-        .notification-item .rank-info {
-            font-size: 11px;
-            color: rgba(255, 255, 255, 0.8);
-        }
+            .sidebar {
+                display: none;
+                position: fixed;
+                right: 0;
+                top: 0;
+                width: 320px;
+                max-width: 85vw;
+                height: 100vh;
+                z-index: 100;
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
+            }
 
-        .footer {
-            text-align: center;
-            padding: 20px;
-            color: #666;
-            font-size: 12px;
-            margin-top: 20px;
+            .sidebar.show {
+                display: flex;
+                transform: translateX(0);
+            }
+
+            .mobile-sidebar-btn {
+                display: block;
+            }
         }
 
         @media (max-width: 600px) {
@@ -444,8 +731,19 @@ function getHTML() {
                 padding: 10px;
             }
 
+            .current-time {
+                font-size: 14px;
+                padding: 8px 12px;
+                top: 10px;
+                left: 10px;
+            }
+
+            .current-time .date {
+                font-size: 11px;
+            }
+
             .header h1 {
-                font-size: 22px;
+                font-size: 24px;
             }
 
             .controls {
@@ -453,14 +751,14 @@ function getHTML() {
             }
 
             .btn {
-                padding: 8px 14px;
-                font-size: 13px;
+                padding: 10px 16px;
+                font-size: 14px;
             }
 
             .rank-table th,
             .rank-table td {
                 padding: 10px 8px;
-                font-size: 12px;
+                font-size: 14px;
             }
 
             .status-bar {
@@ -468,92 +766,130 @@ function getHTML() {
                 gap: 10px;
                 text-align: center;
             }
+
+            .toast {
+                min-width: 280px;
+                max-width: 90vw;
+            }
+
+            .mobile-sidebar-btn {
+                top: 70px;
+                right: 10px;
+                padding: 8px 12px;
+                font-size: 13px;
+            }
         }
-    </style>
+    <\/style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>图寻活跃前100监控</h1>
-            <p class="subtitle">实时监控排行榜积分变动</p>
-            <div class="controls">
-                <div class="mode-switch">
-                    <span id="chinaLabel" class="active">中国</span>
-                    <div class="toggle-btn" id="modeToggle"></div>
-                    <span id="worldLabel">世界</span>
+    <button class="mobile-sidebar-btn" id="mobileSidebarBtn">
+        展开变化记录
+    </button>
+
+    <div class="mobile-overlay" id="mobileOverlay"><\/div>
+
+    <div class="toast-container" id="toastContainer"><\/div>
+
+    <div class="main-content">
+        <div class="container">
+            <div class="header">
+                <div class="current-time" id="currentTime">
+                    <div class="date" id="currentDate"><\/div>
+                    <div id="timeDisplay">--:--:--</div>
                 </div>
-                <button class="btn btn-primary" id="refreshBtn">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
-                    </svg>
-                    手动刷新
-                </button>
-                <button class="btn btn-success" id="autoRefreshBtn">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polygon points="5 3 19 12 5 21 5 3"/>
-                    </svg>
-                    自动刷新中
-                </button>
-            </div>
-        </div>
-
-        <div class="status-bar">
-            <div class="left">
-                <div class="status-indicator">
-                    <div class="status-dot" id="statusDot"></div>
-                    <span id="statusText">自动刷新中</span>
+                <h1>图寻活跃前100监控</h1>
+                <p class="subtitle">实时监控排行榜积分变动</p>
+                <div class="controls">
+                    <div class="mode-switch">
+                        <span id="chinaLabel" class="active">中国</span>
+                        <div class="toggle-btn" id="modeToggle"><\/div>
+                        <span id="worldLabel">世界</span>
+                    </div>
+                    <button class="btn btn-primary" id="refreshBtn">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+                        </svg>
+                        手动刷新
+                    </button>
+                    <button class="btn btn-success" id="autoRefreshBtn">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="5 3 19 12 5 21 5 3"/>
+                        </svg>
+                        自动刷新中
+                    </button>
+                    <div class="interval-setting">
+                        <label>间隔:</label>
+                        <input type="number" id="intervalInput" value="5" min="1" max="60">
+                        <span>秒</span>
+                    </div>
                 </div>
-                <span id="lastUpdate">等待数据...</span>
             </div>
-            <div class="active-count" id="activeCount">活跃: 0 / 100</div>
-        </div>
 
-        <div class="rank-table-container">
-            <table class="rank-table">
-                <thead>
-                    <tr>
-                        <th>排名</th>
-                        <th>玩家</th>
-                        <th>积分</th>
-                        <th>变动</th>
-                    </tr>
-                </thead>
-                <tbody id="rankList">
-                    <tr>
-                        <td colspan="4">
-                            <div class="loading">
-                                <div class="loading-spinner"></div>
-                                <div>正在加载数据...</div>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+            <div class="status-bar">
+                <div class="left">
+                    <div class="status-indicator">
+                        <div class="status-dot" id="statusDot"><\/div>
+                        <span id="statusText">自动刷新中</span>
+                    </div>
+                    <span id="lastUpdate">等待数据...</span>
+                </div>
+                <div class="active-count" id="activeCount">活跃: 0 / 100</div>
+            </div>
 
-        <div class="footer">
-            数据来源: tuxun.fun | 刷新间隔: 5秒
+            <div class="rank-table-container">
+                <table class="rank-table">
+                    <thead>
+                        <tr>
+                            <th>排名</th>
+                            <th>玩家</th>
+                            <th>积分</th>
+                            <th>变动</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rankList">
+                        <tr>
+                            <td colspan="4">
+                                <div class="loading">
+                                    <div class="loading-spinner"><\/div>
+                                    <div>正在加载数据...</div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="footer">
+                数据来源: tuxun.fun | 刷新间隔: <span id="footerInterval">5</span>秒
+            </div>
         </div>
     </div>
 
-    <div class="notification" id="notification">
-        <h4>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/>
-            </svg>
-            积分变动提醒
-        </h4>
-        <div class="notification-content" id="notificationContent"></div>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h3>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/>
+                </svg>
+                积分变动记录
+            </h3>
+        </div>
+        <div class="sidebar-content" id="changeHistory">
+            <div class="no-changes">暂无变动记录</div>
+        </div>
     </div>
 
     <script>
-        const API_BASE = window.location.origin;
+        const TUXUN_API = 'https://tuxun.fun/api/v0/tuxun';
+        const isLocalFile = window.location.protocol === 'file:';
         
         let currentMode = 'china';
-        let isAutoRefresh = true;
+        let isAutoRefresh = false;
         let autoRefreshInterval = null;
+        let refreshIntervalSeconds = 5;
         let playerHistory = { china: {}, world: {} };
         let currentRankData = [];
+        let changeHistory = { china: [], world: [] };
 
         const modeToggle = document.getElementById('modeToggle');
         const chinaLabel = document.getElementById('chinaLabel');
@@ -565,13 +901,72 @@ function getHTML() {
         const lastUpdate = document.getElementById('lastUpdate');
         const activeCount = document.getElementById('activeCount');
         const rankList = document.getElementById('rankList');
-        const notification = document.getElementById('notification');
-        const notificationContent = document.getElementById('notificationContent');
+        const changeHistoryEl = document.getElementById('changeHistory');
+        const timeDisplay = document.getElementById('timeDisplay');
+        const currentDate = document.getElementById('currentDate');
+        const toastContainer = document.getElementById('toastContainer');
+        const intervalInput = document.getElementById('intervalInput');
+        const footerInterval = document.getElementById('footerInterval');
+        const mobileSidebarBtn = document.getElementById('mobileSidebarBtn');
+        const mobileOverlay = document.getElementById('mobileOverlay');
+        const sidebar = document.querySelector('.sidebar');
 
         function init() {
             loadHistory();
-            startAutoRefresh();
+            loadChangeHistory();
+            loadIntervalSetting();
+            updateAutoRefreshUI();
             fetchRankData();
+            updateCurrentTime();
+            setInterval(updateCurrentTime, 1000);
+            setupMobileSidebar();
+            setupVisibilityListener();
+        }
+
+        function setupVisibilityListener() {
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) {
+                    if (isAutoRefresh) {
+                        stopAutoRefresh();
+                    }
+                } else {
+                    if (isAutoRefresh) {
+                        startAutoRefresh();
+                        fetchRankData();
+                    }
+                }
+            });
+        }
+
+        function setupMobileSidebar() {
+            mobileSidebarBtn.addEventListener('click', () => {
+                if (sidebar.classList.contains('show')) {
+                    sidebar.classList.remove('show');
+                    mobileOverlay.classList.remove('show');
+                    mobileSidebarBtn.textContent = '展开变化记录';
+                } else {
+                    sidebar.classList.add('show');
+                    mobileOverlay.classList.add('show');
+                    mobileSidebarBtn.textContent = '收起';
+                }
+            });
+
+            mobileOverlay.addEventListener('click', () => {
+                sidebar.classList.remove('show');
+                mobileOverlay.classList.remove('show');
+                mobileSidebarBtn.textContent = '展开变化记录';
+            });
+        }
+
+        function updateCurrentTime() {
+            const now = new Date();
+            timeDisplay.textContent = now.toLocaleTimeString('zh-CN', { hour12: false });
+            currentDate.textContent = now.toLocaleDateString('zh-CN', { 
+                year: 'numeric', 
+                month: '2-digit', 
+                day: '2-digit',
+                weekday: 'short'
+            });
         }
 
         function loadHistory() {
@@ -585,9 +980,48 @@ function getHTML() {
             localStorage.setItem('playerHistory', JSON.stringify(playerHistory));
         }
 
+        function loadChangeHistory() {
+            const saved = localStorage.getItem('changeHistory');
+            if (saved) {
+                changeHistory = JSON.parse(saved);
+                renderChangeHistory();
+            }
+        }
+
+        function saveChangeHistory() {
+            localStorage.setItem('changeHistory', JSON.stringify(changeHistory));
+        }
+
+        function loadIntervalSetting() {
+            const saved = localStorage.getItem('refreshInterval');
+            if (saved) {
+                refreshIntervalSeconds = parseInt(saved, 10);
+                intervalInput.value = refreshIntervalSeconds;
+                footerInterval.textContent = refreshIntervalSeconds;
+            }
+        }
+
+        function saveIntervalSetting() {
+            localStorage.setItem('refreshInterval', refreshIntervalSeconds.toString());
+            footerInterval.textContent = refreshIntervalSeconds;
+        }
+
+        intervalInput.addEventListener('change', () => {
+            let value = parseInt(intervalInput.value, 10);
+            if (isNaN(value) || value < 1) value = 1;
+            if (value > 60) value = 60;
+            refreshIntervalSeconds = value;
+            intervalInput.value = value;
+            saveIntervalSetting();
+            if (isAutoRefresh) {
+                startAutoRefresh();
+            }
+        });
+
         modeToggle.addEventListener('click', () => {
             currentMode = currentMode === 'china' ? 'world' : 'china';
             updateModeUI();
+            renderChangeHistory();
             fetchRankData();
         });
 
@@ -621,7 +1055,7 @@ function getHTML() {
             if (autoRefreshInterval) clearInterval(autoRefreshInterval);
             autoRefreshInterval = setInterval(() => {
                 if (isAutoRefresh) fetchRankData();
-            }, 5000);
+            }, refreshIntervalSeconds * 1000);
         }
 
         function stopAutoRefresh() {
@@ -635,7 +1069,7 @@ function getHTML() {
             if (isAutoRefresh) {
                 autoRefreshBtn.className = 'btn btn-success';
                 autoRefreshBtn.innerHTML = \`
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <polygon points="5 3 19 12 5 21 5 3"/>
                     </svg>
                     自动刷新中
@@ -645,7 +1079,7 @@ function getHTML() {
             } else {
                 autoRefreshBtn.className = 'btn btn-danger';
                 autoRefreshBtn.innerHTML = \`
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <rect x="6" y="4" width="4" height="16"/>
                         <rect x="14" y="4" width="4" height="16"/>
                     </svg>
@@ -658,17 +1092,27 @@ function getHTML() {
 
         async function fetchRankData() {
             try {
-                const response = await fetch(\`\${API_BASE}/api/rank?type=\${currentMode}\`);
+                const response = await fetch(\`/api/rank?type=\${currentMode}\`);
                 const data = await response.json();
                 
                 if (data.success) {
                     processRankData(data.data);
                 } else {
-                    showError('获取数据失败');
+                    showError('获取数据失败，正在自动重置...');
+                    setTimeout(() => {
+                        localStorage.removeItem('changeHistory');
+                        localStorage.removeItem('playerHistory');
+                        location.reload();
+                    }, 2000);
                 }
             } catch (error) {
                 console.error('Fetch error:', error);
-                showError('网络请求失败');
+                showError('网络请求失败，正在自动重置...');
+                setTimeout(() => {
+                    localStorage.removeItem('changeHistory');
+                    localStorage.removeItem('playerHistory');
+                    location.reload();
+                }, 2000);
             }
         }
 
@@ -679,6 +1123,7 @@ function getHTML() {
                 .slice(0, 100);
 
             let changedPlayers = [];
+            const changeTime = new Date();
             
             sortedData.forEach(player => {
                 const userId = player.userAO.userId;
@@ -691,24 +1136,114 @@ function getHTML() {
                         name: player.userAO.userName,
                         diff: diff,
                         rank: player.rank,
-                        newRating: currentRating
+                        newRating: currentRating,
+                        time: changeTime.toLocaleTimeString('zh-CN', { hour12: false }),
+                        timestamp: changeTime.getTime()
                     });
                 }
             });
 
             if (changedPlayers.length > 0) {
-                showNotification(changedPlayers);
+                addChangeRecords(changedPlayers);
+                showToast(changedPlayers);
             }
 
             currentRankData = sortedData;
             checkActivePlayers(sortedData);
         }
 
+        function addChangeRecords(players) {
+            players.forEach(player => {
+                changeHistory[currentMode].unshift(player);
+            });
+            
+            if (changeHistory[currentMode].length > 10) {
+                changeHistory[currentMode] = changeHistory[currentMode].slice(0, 10);
+            }
+            
+            saveChangeHistory();
+            renderChangeHistory();
+        }
+
+        function renderChangeHistory() {
+            const history = changeHistory[currentMode];
+            if (!history || history.length === 0) {
+                changeHistoryEl.innerHTML = '<div class="no-changes">暂无变动记录</div>';
+                return;
+            }
+
+            let html = '';
+            history.forEach(record => {
+                const diffClass = record.diff > 0 ? 'positive' : 'negative';
+                const diffSign = record.diff > 0 ? '+' : '';
+                const itemClass = record.diff > 0 ? 'positive' : 'negative';
+                
+                html += \`
+                    <div class="change-item \${itemClass}">
+                        <div class="change-time">\${record.time}</div>
+                        <div class="change-player">\${escapeHtml(record.name)}</div>
+                        <div class="change-detail">
+                            <span class="change-diff \${diffClass}">\${diffSign}\${record.diff}</span>
+                            <span class="change-rank">第 \${record.rank} 名 | \${record.newRating} 分</span>
+                        </div>
+                    </div>
+                \`;
+            });
+            
+            changeHistoryEl.innerHTML = html;
+        }
+
+        function showToast(players) {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            
+            let content = '';
+            players.forEach(p => {
+                const diffClass = p.diff > 0 ? 'positive' : 'negative';
+                const diffSign = p.diff > 0 ? '+' : '';
+                content += \`
+                    <div class="toast-item">
+                        <div class="player-change">
+                            <span>\${escapeHtml(p.name)}</span>
+                            <span class="change \${diffClass}">\${diffSign}\${p.diff}</span>
+                        </div>
+                        <div class="rank-info">当前排名: 第 \${p.rank} 名 | 积分: \${p.newRating}</div>
+                    </div>
+                \`;
+            });
+            
+            toast.innerHTML = \`
+                <button class="toast-close" onclick="this.parentElement.remove()">&times;</button>
+                <h4>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/>
+                    </svg>
+                    积分变动提醒 (\${players[0].time})
+                </h4>
+                <div class="toast-content">\${content}</div>
+            \`;
+            
+            toastContainer.insertBefore(toast, toastContainer.firstChild);
+            
+            const autoRemove = setTimeout(() => {
+                toast.classList.add('removing');
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.parentNode.removeChild(toast);
+                    }
+                }, 300);
+            }, 10000);
+            
+            toast.querySelector('.toast-close').addEventListener('click', () => {
+                clearTimeout(autoRemove);
+            });
+        }
+
         async function checkActivePlayers(data) {
             const checkPromises = data.map(async player => {
                 const userId = player.userAO.userId;
                 try {
-                    const response = await fetch(\`\${API_BASE}/api/activity?userId=\${userId}\`);
+                    const response = await fetch(\`/api/activity?userId=\${userId}\`);
                     const result = await response.json();
                     player.isActive = result.isActive;
                 } catch {
@@ -723,7 +1258,7 @@ function getHTML() {
             
             const activeNum = dataWithActive.filter(p => p.isActive).length;
             activeCount.textContent = \`活跃: \${activeNum} / 100\`;
-            lastUpdate.textContent = \`最后更新: \${new Date().toLocaleTimeString()}\`;
+            lastUpdate.textContent = \`最后更新: \${new Date().toLocaleTimeString('zh-CN', { hour12: false })}\`;
         }
 
         function updatePlayerHistory(data) {
@@ -785,36 +1320,12 @@ function getHTML() {
             return div.innerHTML;
         }
 
-        function showNotification(players) {
-            let content = '';
-            players.forEach(p => {
-                const diffClass = p.diff > 0 ? 'positive' : 'negative';
-                const diffSign = p.diff > 0 ? '+' : '';
-                content += \`
-                    <div class="notification-item">
-                        <div class="player-change">
-                            <span>\${escapeHtml(p.name)}</span>
-                            <span class="change \${diffClass}">\${diffSign}\${p.diff}</span>
-                        </div>
-                        <div class="rank-info">当前排名: 第 \${p.rank} 名 | 积分: \${p.newRating}</div>
-                    </div>
-                \`;
-            });
-            
-            notificationContent.innerHTML = content;
-            notification.classList.add('show');
-            
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 5000);
-        }
-
         function showError(message) {
             rankList.innerHTML = \`
                 <tr>
                     <td colspan="4">
                         <div class="loading">
-                            <div style="color: #e74c3c; margin-bottom: 10px;">\${message}</div>
+                            <div style="color: #e74c3c; margin-bottom: 10px; font-size: 16px;">\${message}</div>
                             <button class="btn btn-primary" onclick="fetchRankData()">重试</button>
                         </div>
                     </td>
