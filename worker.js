@@ -25,6 +25,10 @@ export default {
             return proxyRequest(`https://tuxun.fun/api/v0/tuxun/history/listUserRating?userId=${userId}`);
         }
 
+        if (env.ASSETS) {
+            return env.ASSETS.fetch(request);
+        }
+
         return new Response('Not Found', { status: 404 });
     }
 };
