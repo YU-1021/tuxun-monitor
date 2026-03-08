@@ -1,0 +1,12 @@
+{
+  "name": "tuxun-rank-monitor",
+  "version": "1.0.0",
+  "description": "图寻活跃前100监控",
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev"
+  },
+  "devDependencies": {
+    "wrangler": "^3.0.0"
+  }
+}
