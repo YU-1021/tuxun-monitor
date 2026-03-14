@@ -1,0 +1,9 @@
+node_modules/
+.git/
+.wrangler/
+*.log
+*.md
+package.json
+package-lock.json
+server.js
+wrangler.toml
