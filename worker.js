@@ -80,7 +80,8 @@ function getHTML() {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>图寻活跃前100监控</title>
+    <title>图寻排名监控</title>
+    <link rel="icon" href="/icon.ico" type="image/x-icon">
     <style>
         * {
             margin: 0;
@@ -498,6 +499,41 @@ function getHTML() {
             color: #aaa;
         }
 
+        .range-setting {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 8px 16px;
+            border-radius: 25px;
+        }
+
+        .range-setting label {
+            font-size: 14px;
+            color: #aaa;
+        }
+
+        .range-setting input {
+            width: 50px;
+            padding: 6px 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            background: rgba(0, 0, 0, 0.3);
+            color: #fff;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .range-setting input:focus {
+            outline: none;
+            border-color: #ff9427;
+        }
+
+        .range-setting span {
+            font-size: 14px;
+            color: #aaa;
+        }
+
         .status-bar {
             display: flex;
             justify-content: space-between;
@@ -622,6 +658,13 @@ function getHTML() {
         .player-name {
             font-weight: 500;
             color: #e0e0e0;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .player-name:hover {
+            color: #ff9427;
+            text-decoration: underline;
         }
 
         .rating {
@@ -801,7 +844,7 @@ function getHTML() {
                     <div class="date" id="currentDate"><\/div>
                     <div id="timeDisplay">--:--:--</div>
                 </div>
-                <h1>图寻活跃前100监控</h1>
+                <h1>图寻排名 1-100 监控</h1>
                 <p class="subtitle">实时监控排行榜积分变动</p>
                 <div class="controls">
                     <div class="mode-switch">
@@ -825,6 +868,12 @@ function getHTML() {
                         <label>间隔:</label>
                         <input type="number" id="intervalInput" value="5" min="1" max="60">
                         <span>秒</span>
+                    </div>
+                    <div class="range-setting">
+                        <label>排名:</label>
+                        <input type="number" id="rankStart" value="1" min="1" max="9999">
+                        <span>-</span>
+                        <input type="number" id="rankEnd" value="100" min="1" max="9999">
                     </div>
                 </div>
             </div>
@@ -891,6 +940,8 @@ function getHTML() {
         let isAutoRefresh = false;
         let autoRefreshInterval = null;
         let refreshIntervalSeconds = 5;
+        let rankStart = 1;
+        let rankEnd = 100;
         let playerHistory = { china: {}, world: {} };
         let currentRankData = [];
         let changeHistory = { china: [], world: [] };
@@ -911,6 +962,8 @@ function getHTML() {
         const toastContainer = document.getElementById('toastContainer');
         const intervalInput = document.getElementById('intervalInput');
         const footerInterval = document.getElementById('footerInterval');
+        const rankStartInput = document.getElementById('rankStart');
+        const rankEndInput = document.getElementById('rankEnd');
         const mobileSidebarBtn = document.getElementById('mobileSidebarBtn');
         const mobileOverlay = document.getElementById('mobileOverlay');
         const sidebar = document.querySelector('.sidebar');
@@ -919,7 +972,9 @@ function getHTML() {
             loadHistory();
             loadChangeHistory();
             loadIntervalSetting();
+            loadRangeSetting();
             updateAutoRefreshUI();
+            updateTitle();
             fetchRankData();
             updateCurrentTime();
             setInterval(updateCurrentTime, 1000);
@@ -1010,6 +1065,29 @@ function getHTML() {
             footerInterval.textContent = refreshIntervalSeconds;
         }
 
+        function loadRangeSetting() {
+            const savedStart = localStorage.getItem('rankStart');
+            const savedEnd = localStorage.getItem('rankEnd');
+            if (savedStart) {
+                rankStart = parseInt(savedStart, 10);
+                rankStartInput.value = rankStart;
+            }
+            if (savedEnd) {
+                rankEnd = parseInt(savedEnd, 10);
+                rankEndInput.value = rankEnd;
+            }
+        }
+
+        function saveRangeSetting() {
+            localStorage.setItem('rankStart', rankStart.toString());
+            localStorage.setItem('rankEnd', rankEnd.toString());
+        }
+
+        function updateTitle() {
+            const titleEl = document.querySelector('.header h1');
+            titleEl.textContent = \`图寻排名 \${rankStart}-\${rankEnd} 监控\`;
+        }
+
         intervalInput.addEventListener('change', () => {
             let value = parseInt(intervalInput.value, 10);
             if (isNaN(value) || value < 1) value = 1;
@@ -1020,6 +1098,28 @@ function getHTML() {
             if (isAutoRefresh) {
                 startAutoRefresh();
             }
+        });
+
+        rankStartInput.addEventListener('change', () => {
+            let value = parseInt(rankStartInput.value, 10);
+            if (isNaN(value) || value < 1) value = 1;
+            if (value >= rankEnd) value = rankEnd - 1;
+            rankStart = value;
+            rankStartInput.value = value;
+            saveRangeSetting();
+            updateTitle();
+            fetchRankData();
+        });
+
+        rankEndInput.addEventListener('change', () => {
+            let value = parseInt(rankEndInput.value, 10);
+            if (isNaN(value) || value < 1) value = 1;
+            if (value <= rankStart) value = rankStart + 1;
+            rankEnd = value;
+            rankEndInput.value = value;
+            saveRangeSetting();
+            updateTitle();
+            fetchRankData();
         });
 
         modeToggle.addEventListener('click', () => {
@@ -1124,7 +1224,7 @@ function getHTML() {
             const sortedData = data
                 .filter(item => item && item.rank)
                 .sort((a, b) => a.rank - b.rank)
-                .slice(0, 100);
+                .filter(item => item.rank >= rankStart && item.rank <= rankEnd);
 
             let changedPlayers = [];
             const changeTime = new Date();
@@ -1261,7 +1361,7 @@ function getHTML() {
             updatePlayerHistory(dataWithActive);
             
             const activeNum = dataWithActive.filter(p => p.isActive).length;
-            activeCount.textContent = \`活跃: \${activeNum} / 100\`;
+            activeCount.textContent = \`活跃: \${activeNum} / \${dataWithActive.length}\`;
             lastUpdate.textContent = \`最后更新: \${new Date().toLocaleTimeString('zh-CN', { hour12: false })}\`;
         }
 
@@ -1308,7 +1408,7 @@ function getHTML() {
                 html += \`
                     <tr class="\${rowClass}">
                         <td><span class="rank-badge \${rankClass}">\${player.rank}</span></td>
-                        <td class="player-name">\${escapeHtml(player.userAO.userName)}</td>
+                        <td class="player-name" onclick="openUserProfile('\${player.userAO.userId}')">\${escapeHtml(player.userAO.userName)}</td>
                         <td class="rating">\${currentRating}</td>
                         <td class="change \${changeClass}">\${changeText}</td>
                     </tr>
@@ -1322,6 +1422,10 @@ function getHTML() {
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
+        }
+
+        function openUserProfile(userId) {
+            window.open(\`https://tuxun.fun/user/\${userId}\`, '_blank');
         }
 
         function showError(message) {
