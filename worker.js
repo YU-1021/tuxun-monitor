@@ -11,7 +11,7 @@ export default {
 
         if (path === '/api/rank') {
             const type = url.searchParams.get('type') || 'china';
-            return proxyRequest(`https://tuxun.fun/api/v0/tuxun/getRank?type=${type}`);
+            return proxyRequest(`https://tuxun.fun/api/v0/tuxun/getRank?type=${type}`, env);
         }
 
         if (path === '/api/activity') {
@@ -22,7 +22,7 @@ export default {
                     headers: { 'Content-Type': 'application/json' }
                 });
             }
-            return proxyRequest(`https://tuxun.fun/api/v0/tuxun/history/listUserRating?userId=${userId}`);
+            return proxyRequest(`https://tuxun.fun/api/v0/tuxun/history/listUserRating?userId=${userId}`, env);
         }
 
         if (env.ASSETS) {
@@ -33,15 +33,21 @@ export default {
     }
 };
 
-async function proxyRequest(targetUrl) {
+async function proxyRequest(targetUrl, env) {
     try {
+        const headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+            'Accept': 'application/json',
+            'Referer': 'https://tuxun.fun/'
+        };
+        
+        if (env.FUN_TICKET) {
+            headers['Cookie'] = `fun_ticket=${env.FUN_TICKET}`;
+        }
+        
         const response = await fetch(targetUrl, {
             method: 'GET',
-            headers: {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-                'Accept': 'application/json',
-                'Referer': 'https://tuxun.fun/'
-            }
+            headers: headers
         });
 
         const data = await response.json();
@@ -241,130 +247,6 @@ function getHTML() {
             font-size: 13px;
             color: #aaa;
             font-weight: 400;
-        }
-
-        .about-btn {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 10px 18px;
-            border-radius: 16px;
-            font-size: 16px;
-            font-weight: 500;
-            color: #fff;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            z-index: 1000;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .about-btn:hover {
-            background: rgba(255, 148, 39, 0.8);
-            border-color: rgba(255, 148, 39, 0.5);
-        }
-
-        .about-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
-            backdrop-filter: blur(5px);
-        }
-
-        .about-modal.show {
-            display: flex;
-        }
-
-        .about-content {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-            padding: 30px 40px;
-            border-radius: 20px;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-            animation: modalIn 0.3s ease;
-        }
-
-        @keyframes modalIn {
-            from {
-                opacity: 0;
-                transform: scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        .about-content h2 {
-            font-size: 24px;
-            color: #ff9427;
-            margin-bottom: 24px;
-        }
-
-        .about-close {
-            position: absolute;
-            top: 12px;
-            right: 16px;
-            background: none;
-            border: none;
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 28px;
-            cursor: pointer;
-            padding: 0;
-            line-height: 1;
-            transition: color 0.2s;
-        }
-
-        .about-close:hover {
-            color: #fff;
-        }
-
-        .contact-links {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .contact-link {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 14px 28px;
-            border-radius: 12px;
-            font-size: 17px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .contact-link.bilibili {
-            background: linear-gradient(135deg, #00a1d6, #00c8d4);
-            color: #fff;
-        }
-
-        .contact-link.bilibili:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 161, 214, 0.4);
-        }
-
-        .contact-link.qq {
-            background: linear-gradient(135deg, #12b7f5, #5bc0de);
-            color: #fff;
-        }
-
-        .contact-link.qq:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(18, 183, 245, 0.4);
         }
 
         .toast-container {
@@ -974,23 +856,6 @@ function getHTML() {
         <div id="timeDisplay">--:--:--</div>
     </div>
 
-    <button class="about-btn" id="aboutBtn">关于</button>
-
-    <div class="about-modal" id="aboutModal">
-        <div class="about-content">
-            <button class="about-close" id="aboutClose">&times;</button>
-            <h2>联系我</h2>
-            <div class="contact-links">
-                <a class="contact-link bilibili" href="https://space.bilibili.com/1075986758" target="_blank">
-                    哔哩哔哩
-                </a>
-                <a class="contact-link qq" href="https://qm.qq.com/cgi-bin/qm/qr?k=OlfV_hqd2kMBskEBU0fGmcs1sOyzNISW&jump_from=webapi&authKey=c/lT+eQELbfJSC1flJVTgUjSUfJPMyqWLYhAjt/gAg0sEfL8wqlAfBYzxwxyZLVd" target="_blank">
-                    QQ群
-                </a>
-            </div>
-        </div>
-    </div>
-
     <div class="main-content">
         <div class="container">
             <div class="header">
@@ -1117,9 +982,6 @@ function getHTML() {
         const mobileSidebarBtn = document.getElementById('mobileSidebarBtn');
         const mobileOverlay = document.getElementById('mobileOverlay');
         const sidebar = document.querySelector('.sidebar');
-        const aboutBtn = document.getElementById('aboutBtn');
-        const aboutModal = document.getElementById('aboutModal');
-        const aboutClose = document.getElementById('aboutClose');
 
         function init() {
             loadHistory();
@@ -1133,7 +995,6 @@ function getHTML() {
             setInterval(updateCurrentTime, 1000);
             setupMobileSidebar();
             setupVisibilityListener();
-            setupAboutModal();
         }
 
         function setupVisibilityListener() {
@@ -1168,22 +1029,6 @@ function getHTML() {
                 sidebar.classList.remove('show');
                 mobileOverlay.classList.remove('show');
                 mobileSidebarBtn.textContent = '展开变化记录';
-            });
-        }
-
-        function setupAboutModal() {
-            aboutBtn.addEventListener('click', () => {
-                aboutModal.classList.add('show');
-            });
-
-            aboutClose.addEventListener('click', () => {
-                aboutModal.classList.remove('show');
-            });
-
-            aboutModal.addEventListener('click', (e) => {
-                if (e.target === aboutModal) {
-                    aboutModal.classList.remove('show');
-                }
             });
         }
 
